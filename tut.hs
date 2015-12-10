@@ -679,3 +679,31 @@ fact n
 
 prop_fact n =
   fact n > 0
+
+-- Chapter 5
+
+type ShopItem = (String,Int)
+
+
+type Basket = [ShopItem]
+
+minAndMax :: Integer -> Integer -> (Integer, Integer)
+minAndMax x y
+  | x >= y     = (y, x)
+  | otherwise  = (x, y)
+
+addPair :: (Integer,Integer) -> Integer
+addPair (0,y) = y
+addPair (x,y) = x + y
+
+shift' :: ((Integer,Integer),Integer) -> (Integer,(Integer,Integer))
+shift' ((x,y),z) = (x,(y,z))
+
+name  :: ShopItem -> String
+price :: ShopItem -> Int
+
+name  (n,p) = n
+price (n,p) = p
+
+addPair' :: (Integer,Integer) -> Integer
+addPair' p = fst p + snd p

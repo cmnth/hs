@@ -427,11 +427,12 @@ averageThree m n p =  (fromIntegral m + fromIntegral n + fromIntegral p) / 3
 
 maxThree' x y z = max (max x y) z
 maxThree x y z = (x `max` y) `max` z
+minThree x y z = (x `min` y) `min` z
 
 middleNumber :: Integer -> Integer -> Integer -> Integer
 middleNumber x y z
-  | between y x z      = x
-  | between x y z      = y
+  | between' y x z      = x
+  | between' x y z      = y
   | otherwise          = z
 
 between :: Integer -> Integer -> Integer -> Bool
@@ -439,7 +440,7 @@ between m n p
   | (m < n) && (n < p)   = True
   | otherwise            = False
 
-between' :: Int -> Int -> Int -> Bool
+between' :: Integer -> Integer -> Integer -> Bool
 between' x y z =
   weakAscendingOrder x y z || weakDescendingOrder x y z
 
@@ -455,12 +456,12 @@ maxFour'  m n p q = max (max (max m n) p) q
 
 maxFour'' m n p q = max (maxThree m n p) q
 
-weakAscendingOrder :: Int -> Int -> Int -> Bool
+weakAscendingOrder :: Integer -> Integer -> Integer -> Bool
 weakAscendingOrder m n p
   | (m <= n) && (n <=p) = True
   | otherwise           = False
 
-weakDescendingOrder :: Int -> Int -> Int -> Bool
+weakDescendingOrder :: Integer -> Integer -> Integer -> Bool
 weakDescendingOrder m n p
   | (m >= n) && (n >= p) = True
   | otherwise            = False
@@ -707,3 +708,34 @@ price (n,p) = p
 
 addPair' :: (Integer,Integer) -> Integer
 addPair' p = fst p + snd p
+
+fibPair :: Integer -> (Integer, Integer)
+fibPair n
+  | n == 0    = (0,1)
+  | otherwise = fibStep (fibPair (n-1))
+
+fibStep :: (Integer,Integer) -> (Integer,Integer)
+fibStep (x,y) = (y,x+y)
+
+fibTwoStep :: Integer ->Integer -> (Integer,Integer)
+fibTwoStep x y = (y,x+y)
+
+fastFib :: Integer -> Integer
+fastFib = fst . fibPair
+
+maxOccurs :: Integer -> Integer -> (Integer,Integer)
+maxOccurs x y
+  | x == y    = (x,2)
+  | otherwise = (max x y, 1)
+
+maxThreeOccurs :: Integer -> Integer -> Integer -> (Integer,Integer)
+maxThreeOccurs x y z
+  | x == y && y == z                     = (x,3)
+  | (x == y) || (x == z) && x == maxElem = (x,2)
+  | y == z && y == maxElem               = (y,2)
+  | otherwise                            = (maxElem,1)
+  where
+    maxElem = max (max x y) z
+
+orderTriple :: (Integer,Integer,Integer) -> (Integer,Integer,Integer)
+orderTriple (x,y,z) = (minThree x y z,middleNumber x y z,maxThree x y z)

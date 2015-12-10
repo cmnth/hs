@@ -652,6 +652,20 @@ testMax5 = TestCase (assertEqual "for: maxThree 6 6 2" 6 (mysteryMax 6 6 2))
 
 testsMax = TestList [testMax1, testMax2, testMax3, testMax4, testMax5]
 
+
+allEqual :: Integer -> Integer -> Integer -> Bool
+allEqual m n p
+  | (m ==n) && (n == p)  = True
+  | otherwise            = False
+
+testEq1 = TestCase (assertEqual "for: allEqual 4 5 6" False (allEqual 4 5 6))
+testEq2 = TestCase (assertEqual "for: allEqual 4 4 6" False (allEqual 4 4 6))
+testEq3 = TestCase (assertEqual "for: allEqual 4 5 4" False (allEqual 4 5 4))
+testEq4 = TestCase (assertEqual "for: allEqual 5 4 4" False (allEqual 5 4 4))
+testEq5 = TestCase (assertEqual "for: allEqual 4 4 4" True (allEqual 4 4 4))
+
+testsEq = TestList [testEq1, testEq2, testEq3, testEq4, testEq5]
+
 mysteryMax :: Integer -> Integer -> Integer -> Integer
 mysteryMax x y z
   | x > y && x > z   = x

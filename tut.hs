@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 import           Data.List
 import           System.IO
-import           Data.Char hiding (toUpper,isDigit)
+import           Data.Char hiding (isDigit)
 import           Debug.HTrace
 import           Test.HUnit
 import           Test.QuickCheck
@@ -418,8 +418,8 @@ fourEqual m n p q = ((m==n) && (n==p) && (p==q))
 offset :: Int
 offset = fromEnum 'A' - fromEnum 'a'
 
-toUpper :: Char -> Char
-toUpper ch = toEnum (fromEnum ch + offset)
+toUpper' :: Char -> Char
+toUpper' ch = toEnum (fromEnum ch + offset)
 
 averageThree :: Integer -> Integer -> Integer -> Float
 averageThree m n p =  (fromIntegral m + fromIntegral n + fromIntegral p) / 3
@@ -502,6 +502,12 @@ sumSquares n m
 
 data Move = Rock | Paper | Scissors
           deriving (Show,Eq)
+
+score :: Move -> Move -> Integer
+score Rock Rock     = 0
+score Rock Paper    = -1
+score Rock Scissors = 1
+score Paper Rock    = 1
 
 beat :: Move -> Move
 
@@ -739,3 +745,58 @@ maxThreeOccurs x y z
 
 orderTriple :: (Integer,Integer,Integer) -> (Integer,Integer,Integer)
 orderTriple (x,y,z) = (minThree x y z,middleNumber x y z,maxThree x y z)
+
+data People = Person Name Age
+              deriving (Eq, Show)
+
+type Name = String
+type Age  = Int
+
+showPerson :: People -> String
+showPerson (Person st n) = st ++ " -- " ++ show n
+
+
+data Shape = Circle Float |
+             Rectangle Float Float
+             deriving (Eq,Ord,Show)
+
+isRound :: Shape -> Bool
+isRound (Circle _) = True
+isRound (Rectangle _ _) = False
+
+area :: Shape -> Float
+area (Circle r)      = pi * r * r
+area (Rectangle h w) = h * w
+
+
+addPairs :: [(Integer,Integer)] -> [Integer]
+addPairs pairList = [ m + n | (m, n) <- pairList]
+
+addOrdPairs :: [(Integer,Integer)] -> [Integer]
+addOrdPairs pairList = [ m + n | (m, n) <- pairList, m < n ]
+
+digits :: String -> String
+digits st = [ ch | ch <- st, isDigit ch ]
+
+allEven xs = (xs == [ x | x <- xs, isEven x])
+allOdd  xs = ([] == [ x | x <- xs, isEven x])
+
+totalRadii :: [Shape] -> Float
+totalRadii shapes = sum [r | Circle r <- shapes]
+
+-- extracts all singleton elements from a list of lists
+sings :: [[Integer]] -> [Integer]
+sings xss = [x | [x] <- xss]
+
+doubleAll :: [Integer] -> [Integer]
+doubleAll xs = [ 2 * x | x <- xs]
+
+capitalize :: String -> String
+capitalize st = [toUpper ch | ch <- st ]
+
+lowercaseAll :: String -> String
+lowercaseAll st = [toLower ch | ch <- st]
+
+capitalizeLetters :: String -> String
+capitalizeLetters st =
+  [toUpper ch | ch <- st, isAlpha ch]

@@ -1,1 +1,1 @@
-# Exercise files for books on Haskell
+# Exercise files for two Haskell books - Craft3e and FFP
